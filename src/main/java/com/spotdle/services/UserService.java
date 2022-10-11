@@ -12,12 +12,8 @@ import com.spotdle.repositories.UserRepository;
 public class UserService {
     @Autowired
     UserRepository userRepository;
-    
-    public ArrayList<UserModel> obtenerUsuarios(){
-        return (ArrayList<UserModel>) userRepository.findAll();
-    }
 
-    public UserModel guardarUsuario(UserModel usuario){
-        return userRepository.save(usuario);
+    public UserModel findUserById(Long id){
+        return userRepository.findById(id).get();
     }
 }

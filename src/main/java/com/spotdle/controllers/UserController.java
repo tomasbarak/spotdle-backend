@@ -15,7 +15,7 @@ import com.spotdle.services.UserService;
 
 import se.michaelthelin.spotify.*;
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/me/user/name")
 public class UserController {
     @Autowired
     UserService userService;
@@ -23,10 +23,5 @@ public class UserController {
     @GetMapping()
     public ArrayList<UserModel> obtenerUsuarios(){
         return userService.obtenerUsuarios();
-    }
-
-    @PostMapping()
-    public UserModel guardarUsuario(UserModel usuario){
-        return this.userService.guardarUsuario(usuario);
     }
 }
