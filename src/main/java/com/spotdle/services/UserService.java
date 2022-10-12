@@ -13,7 +13,11 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
-    public UserModel findUserById(Long id){
+    public UserModel findUserById(String id){
         return userRepository.findById(id).get();
+    }
+
+    public UserModel saveUser(UserModel user){
+        return userRepository.save(user);
     }
 }

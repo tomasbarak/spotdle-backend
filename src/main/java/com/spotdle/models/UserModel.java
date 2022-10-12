@@ -6,17 +6,14 @@ import javax.persistence.*;
 public class UserModel {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private Long id;
-    
+    private String id;
 
     private String name;
     private String email;
-    private String spotify_key;
 
     //Getters
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -28,12 +25,8 @@ public class UserModel {
         return email;
     }
 
-    public String getSpotify_key() {
-        return spotify_key;
-    }
-
     //Setters
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -44,9 +37,4 @@ public class UserModel {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public void setSpotify_key(String spotify_key) {
-        this.spotify_key = spotify_key;
-    }
-
 }
