@@ -32,7 +32,7 @@ public class LoginController {
     @GetMapping()
     @ResponseBody
     public void returnCredential(@RequestParam String code, HttpServletResponse response, HttpServletRequest request) {
-        SpotifyApi spotifyApi = new SpotifyApi.Builder().setClientId("17c584ee17464633bd876e27993e4a09").setClientSecret("86f590579d084180b23278d10f3b36cd").setRedirectUri(URI.create("http://172.16.10.231:3000/spotify-redirect")).build();
+        SpotifyApi spotifyApi = new SpotifyApi.Builder().setClientId("17c584ee17464633bd876e27993e4a09").setClientSecret("86f590579d084180b23278d10f3b36cd").setRedirectUri(URI.create("http://localhost:3000/spotify-redirect")).build();
         AuthorizationCodeRequest authorizationCodeRequest = spotifyApi.authorizationCode(code).build();
         String accessToken = "";
         try {
@@ -49,10 +49,11 @@ public class LoginController {
             System.out.println(4);
             Cookie spotdle_cookie = new Cookie("spotdle-access", accessToken);
 
-            response.setHeader("Location", "http://localhost:3001");
+            response.setHeader("Location", "http://localhost:5500/");
             response.setStatus(302);
 
             spotdle_cookie.setSecure(false);
+            spotdle_cookie.setPath("/album_game");
             spotdle_cookie.setMaxAge(7 * 24 * 60 * 60);
             response.addCookie(spotdle_cookie);
 
