@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.spotdle.models.UserModel;
 import com.spotdle.services.SpotifyService;
 import com.spotdle.services.UserService;
 
@@ -31,15 +32,21 @@ public class LoginController {
     @GetMapping()
     @ResponseBody
     public void returnCredential(@RequestParam String code, HttpServletResponse response, HttpServletRequest request) {
-        SpotifyApi spotifyApi = new SpotifyApi.Builder().setClientId("17c584ee17464633bd876e27993e4a09").setClientSecret("86f590579d084180b23278d10f3b36cd").setRedirectUri(URI.create("http://localhost:3000/spotify-redirect")).build();
+        SpotifyApi spotifyApi = new SpotifyApi.Builder().setClientId("17c584ee17464633bd876e27993e4a09").setClientSecret("86f590579d084180b23278d10f3b36cd").setRedirectUri(URI.create("http://172.16.10.231:3000/spotify-redirect")).build();
         AuthorizationCodeRequest authorizationCodeRequest = spotifyApi.authorizationCode(code).build();
         String accessToken = "";
         try {
+            System.out.println(0);
             final AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
+            System.out.println(1);
             accessToken = authorizationCodeCredentials.getAccessToken();
+            System.out.println(2);
             SpotifyService spotifyService = new SpotifyService(accessToken);
-
-            userService.saveUser(spotifyService.getUser());
+            System.out.println(3);
+            UserModel user = spotifyService.getUser();
+            System.out.println(3.5);
+            userService.saveUser(user);
+            System.out.println(4);
             Cookie spotdle_cookie = new Cookie("spotdle-access", accessToken);
 
             response.setHeader("Location", "http://localhost:3001");
