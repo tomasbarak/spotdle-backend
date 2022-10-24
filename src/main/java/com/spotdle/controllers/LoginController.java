@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,34 +30,51 @@ public class LoginController {
     @Autowired
     UserService userService;
 
+    @Value("${url.frontendDomain}")
+    private String frontendDomain;
+
+    @Value("${url.frontendDomainName}")
+    private String frontendDomainName;
+
+    @Value("${url.backendDomain}")
+    private String backendDomain;
+    
+    @Value("${url.backendDomainName}")
+    private String backendDomainName;
+
+    @Value("${url.auth.redirect}")
+    private String redirectUrl;
+
+
     @GetMapping()
     @ResponseBody
     public void returnCredential(@RequestParam String code, HttpServletResponse response, HttpServletRequest request) {
-        SpotifyApi spotifyApi = new SpotifyApi.Builder().setClientId("17c584ee17464633bd876e27993e4a09").setClientSecret("86f590579d084180b23278d10f3b36cd").setRedirectUri(URI.create("http://localhost:3000/spotify-redirect")).build();
+        SpotifyApi spotifyApi = new SpotifyApi.Builder().setClientId("17c584ee17464633bd876e27993e4a09")
+        .setClientSecret("86f590579d084180b23278d10f3b36cd")
+        .setRedirectUri(URI.create(this.redirectUrl.toString()))
+        .build();
+
         AuthorizationCodeRequest authorizationCodeRequest = spotifyApi.authorizationCode(code).build();
         String accessToken = "";
         try {
-            System.out.println(0);
+            //System.out.println(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath());
             final AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
-            System.out.println(1);
             accessToken = authorizationCodeCredentials.getAccessToken();
-            System.out.println(2);
-            SpotifyService spotifyService = new SpotifyService(accessToken);
-            System.out.println(3);
+            SpotifyService spotifyService = new SpotifyService(accessToken, this.redirectUrl);
             UserModel user = spotifyService.getUser();
-            System.out.println(3.5);
             userService.saveUser(user);
-            System.out.println(4);
             Cookie spotdle_cookie = new Cookie("spotdle-access", accessToken);
 
-            response.setHeader("Location", "http://localhost:5500/");
-            response.setStatus(302);
 
             spotdle_cookie.setSecure(false);
-            spotdle_cookie.setPath("/album_game");
+            spotdle_cookie.setDomain(this.frontendDomainName);
             spotdle_cookie.setMaxAge(7 * 24 * 60 * 60);
             response.addCookie(spotdle_cookie);
-
+            response.setHeader("Access-Control-Allow-Credentials", "true");
+            response.setHeader("Access-Control-Allow-Origin", this.backendDomain);
+            response.setHeader("Access-Control-Allow-Methods", "GET");
+            response.setHeader("Location", this.frontendDomain);
+            response.setStatus(302);
         } catch (IOException | SpotifyWebApiException | org.apache.hc.core5.http.ParseException e) {
             System.out.println("Error: " + e.getMessage());
             response.setStatus(500);
