@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.hc.core5.http.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.annotation.Id;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,11 @@ import com.spotdle.services.SpotifyService;
 import com.spotdle.services.UserService;
 
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
+import se.michaelthelin.spotify.model_objects.specification.Album;
+import se.michaelthelin.spotify.model_objects.specification.AlbumSimplified;
+import se.michaelthelin.spotify.model_objects.specification.Artist;
 import se.michaelthelin.spotify.model_objects.specification.Image;
+import se.michaelthelin.spotify.model_objects.specification.Paging;
 
 @RestController
 @RequestMapping("/me/user")
@@ -60,6 +65,31 @@ public class UserController {
         SpotifyService spotifyService = new SpotifyService(accessToken, this.redirectUrl);
         return spotifyService.getCurrentUser().getImages();
     }
+    @GetMapping("/topartists")
+    public Paging<Artist> getMyTopArtists(@CookieValue("spotdle-access") String accessToken, HttpServletResponse response, HttpServletRequest request) throws ParseException, SpotifyWebApiException, IOException{
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+        response.setHeader("Access-Control-Allow-Methods", "GET");
+        SpotifyService spotifyService = new SpotifyService(accessToken, this.redirectUrl);
+        return spotifyService.getUserTopArtists(50);
+    }
     
+    @GetMapping("/artist")
+    public Artist getArtist(@RequestParam String id, @CookieValue("spotdle-access") String accessToken, HttpServletResponse response, HttpServletRequest request) throws ParseException, SpotifyWebApiException, IOException {
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+        response.setHeader("Access-Control-Allow-Methods", "GET");
+        SpotifyService spotifyService = new SpotifyService(accessToken, this.redirectUrl);
+        return spotifyService.getArtist(id);
+    }
+
+    @GetMapping("/artist/albums")
+    public AlbumSimplified[] getArtistAlbums(@RequestParam String id, @CookieValue("spotdle-access") String accessToken, HttpServletResponse response, HttpServletRequest request) throws ParseException, SpotifyWebApiException, IOException {
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+        response.setHeader("Access-Control-Allow-Methods", "GET");
+        SpotifyService spotifyService = new SpotifyService(accessToken, this.redirectUrl);
+        return spotifyService.getArtistAlbums(id);
+    }
 }
 

@@ -11,6 +11,9 @@ import com.spotdle.models.UserModel;
 import se.michaelthelin.spotify.SpotifyApi;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
 import se.michaelthelin.spotify.model_objects.specification.Album;
+import se.michaelthelin.spotify.model_objects.specification.AlbumSimplified;
+import se.michaelthelin.spotify.model_objects.specification.Artist;
+import se.michaelthelin.spotify.model_objects.specification.Paging;
 import se.michaelthelin.spotify.model_objects.specification.User;
 import se.michaelthelin.spotify.requests.data.albums.GetAlbumRequest;
 
@@ -38,6 +41,18 @@ public class SpotifyService {
 
     public User getCurrentUser() throws ParseException, SpotifyWebApiException, IOException {
         return this.spotifyApi.getCurrentUsersProfile().build().execute();
+    }
+
+    public Paging<Artist> getUserTopArtists(int limit) throws ParseException, SpotifyWebApiException, IOException {
+        return this.spotifyApi.getUsersTopArtists().limit(limit).build().execute();
+    }
+
+    public Artist getArtist(String id) throws ParseException, SpotifyWebApiException, IOException {
+        return this.spotifyApi.getArtist(id).build().execute();
+    }
+
+    public AlbumSimplified[] getArtistAlbums(String id) throws ParseException, SpotifyWebApiException, IOException {
+        return this.spotifyApi.getArtistsAlbums(id).build().execute().getItems();
     }
 
     public Album getAlbum(String albumId) {
