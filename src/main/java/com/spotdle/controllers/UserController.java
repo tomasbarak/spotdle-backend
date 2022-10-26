@@ -71,7 +71,7 @@ public class UserController {
         response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
         response.setHeader("Access-Control-Allow-Methods", "GET");
         SpotifyService spotifyService = new SpotifyService(accessToken, this.redirectUrl);
-        return spotifyService.getUserTopArtists(50);
+        return spotifyService.getUserTopArtists(15);
     }
     
     @GetMapping("/artist")
