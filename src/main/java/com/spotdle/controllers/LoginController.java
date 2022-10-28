@@ -67,7 +67,7 @@ public class LoginController {
 
 
             spotdle_cookie.setSecure(false);
-            spotdle_cookie.setDomain(this.frontendDomainName);
+            spotdle_cookie.setDomain(this.backendDomainName);
             spotdle_cookie.setMaxAge(7 * 24 * 60 * 60);
             response.addCookie(spotdle_cookie);
             response.setHeader("Access-Control-Allow-Credentials", "true");
