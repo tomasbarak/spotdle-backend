@@ -1,0 +1,14 @@
+services:
+  # A Docker web service
+  - type: web
+    name: spotdle
+    env: docker
+    repo: https://github.com/tomasbarak/spotdle-backend.git # optional
+    rootDir: /
+    healthCheckPath: /
+    envVars:
+      - key: REDIS_PORT
+        fromService:
+          type: redis
+          name: lightning
+          property: 443
