@@ -71,7 +71,7 @@ public class LoginController {
             spotdle_cookie.setMaxAge(7 * 24 * 60 * 60);
             response.addCookie(spotdle_cookie);
             response.setHeader("Access-Control-Allow-Credentials", "true");
-            response.setHeader("Access-Control-Allow-Origin", this.frontendDomain);
+            response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
             response.setHeader("Access-Control-Allow-Methods", "GET");
             response.setHeader("Location", this.frontendDomain);
             response.setStatus(302);
