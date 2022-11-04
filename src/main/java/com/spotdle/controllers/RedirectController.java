@@ -49,6 +49,6 @@ public class RedirectController {
         Cookie spotdle_cookie = new Cookie("state", Hex.encodeHex(b).toString());
         spotdle_cookie.setDomain(this.frontendDomainName);
         response.addCookie(spotdle_cookie);
-        response.sendRedirect("https://accounts.spotify.com/authorize?client_id=17c584ee17464633bd876e27993e4a09&response_type=code&redirect_uri=" + this.redirectUrl + "&scope=user-read-private%20user-read-email%20user-top-read&state=" + state);
+        response.sendRedirect("http://accounts.spotify.com/authorize?client_id=17c584ee17464633bd876e27993e4a09&response_type=code&redirect_uri=" + this.redirectUrl + "&scope=user-read-private%20user-read-email%20user-top-read&state=" + state);
     }
 }
