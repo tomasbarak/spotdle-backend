@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.spotdle.services.UserService;
 
 @RestController
-@RequestMapping("/redirect")
+@RequestMapping("/giga-redirect")
 public class RedirectController {
     @Autowired
     UserService userService;
@@ -50,6 +50,5 @@ public class RedirectController {
         spotdle_cookie.setDomain(this.frontendDomainName);
         response.addCookie(spotdle_cookie);
         response.sendRedirect("https://accounts.spotify.com/authorize?client_id=17c584ee17464633bd876e27993e4a09&response_type=code&redirect_uri=" + this.redirectUrl + "&scope=user-read-private%20user-read-email%20user-top-read&state=" + state);
-    
     }
 }
