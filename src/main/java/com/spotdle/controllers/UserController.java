@@ -40,6 +40,9 @@ public class UserController {
     public UserModel getUser(@CookieValue("spotdle-access") String accessToken, HttpServletResponse response, HttpServletRequest request) throws ParseException, SpotifyWebApiException, IOException {
         SpotifyService spotifyService = new SpotifyService(accessToken, this.redirectUrl);
         String id = spotifyService.getUser().getId();
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+        response.setHeader("Access-Control-Allow-Methods", "GET");
         return userService.findUserById(id);
     }
 
@@ -47,6 +50,9 @@ public class UserController {
     public String getMyUserName(@CookieValue("spotdle-access") String accessToken, HttpServletResponse response, HttpServletRequest request) throws ParseException, SpotifyWebApiException, IOException{
         SpotifyService spotifyService = new SpotifyService(accessToken, this.redirectUrl);
         String id = spotifyService.getUser().getId();
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+        response.setHeader("Access-Control-Allow-Methods", "GET");
         return userService.findUserById(id).getName();
     }
 
@@ -54,6 +60,9 @@ public class UserController {
     public String getMyUserEmail(@CookieValue("spotdle-access") String accessToken, HttpServletResponse response, HttpServletRequest request) throws ParseException, SpotifyWebApiException, IOException{
         SpotifyService spotifyService = new SpotifyService(accessToken, this.redirectUrl);
         String id = spotifyService.getUser().getId();
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+        response.setHeader("Access-Control-Allow-Methods", "GET");
         return userService.findUserById(id).getEmail();
     }
 
