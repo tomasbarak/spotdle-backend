@@ -55,6 +55,8 @@ public class RankingController {
     
     @PostMapping("/save")
     public void saveRanking(@CookieValue("spotdle-access") String accessToken, HttpServletResponse response, HttpServletRequest request, @RequestBody Integer score) throws ParseException, SpotifyWebApiException, IOException {
+        System.out.println(score);
+        
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
         response.setHeader("Access-Control-Allow-Methods", "POST");
