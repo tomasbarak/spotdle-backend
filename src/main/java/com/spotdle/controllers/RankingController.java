@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Id;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,8 +47,17 @@ public class RankingController {
         return currentUser.getMaxScore();
     }
     
-    @GetMapping("/save")
-    public void saveRanking(@CookieValue("spotdle-access") String accessToken, HttpServletResponse response, HttpServletRequest request) throws ParseException, SpotifyWebApiException, IOException {
+    @PostMapping("/save")
+    public void saveRanking(@CookieValue("spotdle-access") String accessToken, HttpServletResponse response, HttpServletRequest request, @RequestBody Integer score) throws ParseException, SpotifyWebApiException, IOException {
+        SpotifyService spotifyService = new SpotifyService(accessToken, this.redirectUrl);
+        String userId = spotifyService.getCurrentUser().getId();
+        UserModel currentUser = this.userService.findUserById(userId);
+        Integer oldScore = currentUser.getMaxScore();
+        if(score > oldScore) {
+            currentUser.setMaxScore(score);
+            userService.saveUser(currentUser);
+        }
+        return;
     }
 }
 
