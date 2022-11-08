@@ -33,7 +33,7 @@ import se.michaelthelin.spotify.model_objects.specification.Paging;
 
 @ResponseBody
 @RestController
-@RequestMapping("/me/user/ranking")
+@RequestMapping("/ranking")
 public class RankingController {
     @Autowired
     UserService userService;
@@ -41,36 +41,14 @@ public class RankingController {
     @Value("${url.auth.redirect}")
     private String redirectUrl;
 
-    @GetMapping()
-    public Integer getMaxScore(@CookieValue("spotdle-access") String accessToken, HttpServletResponse response, HttpServletRequest request) throws ParseException, SpotifyWebApiException, IOException {
+    @GetMapping("/top")
+    public UserModel[] getTopUsers(@CookieValue("spotdle-access") String accessToken, HttpServletResponse response, HttpServletRequest request, @RequestParam Integer Q) throws ParseException, SpotifyWebApiException, IOException {
+        SpotifyService spotifyService = new SpotifyService(accessToken, this.redirectUrl);
+        String id = spotifyService.getUser().getId();
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
         response.setHeader("Access-Control-Allow-Methods", "GET");
-        
-        SpotifyService spotifyService = new SpotifyService(accessToken, this.redirectUrl);
-        String userId = spotifyService.getCurrentUser().getId();
-        UserModel currentUser = this.userService.findUserById(userId);
-        return currentUser.getMaxScore();
-    }
-    
-    @PostMapping("/save")
-    public Boolean saveRanking(@CookieValue("spotdle-access") String accessToken, HttpServletResponse response, HttpServletRequest request, @RequestBody Score score) throws ParseException, SpotifyWebApiException, IOException {
-        System.out.println(score);
-        
-        response.setHeader("Access-Control-Allow-Credentials", "true");
-        response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
-        
-        SpotifyService spotifyService = new SpotifyService(accessToken, this.redirectUrl);
-        String userId = spotifyService.getCurrentUser().getId();
-        UserModel currentUser = this.userService.findUserById(userId);
-        Integer oldScore = currentUser.getMaxScore();
-        if(score.getScore() > oldScore) {
-            currentUser.setMaxScore(score.getScore());
-            userService.saveUser(currentUser);
-            return true;
-        } else {
-            return false;
-        }
+        return userService.getTopUsers(Q);
     }
 }
 

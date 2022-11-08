@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Id;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -99,6 +101,38 @@ public class UserController {
         response.setHeader("Access-Control-Allow-Methods", "GET");
         SpotifyService spotifyService = new SpotifyService(accessToken, this.redirectUrl);
         return spotifyService.getArtistAlbums(id);
+    }
+
+    @GetMapping("/maxScore")
+    public Integer getMaxScore(@CookieValue("spotdle-access") String accessToken, HttpServletResponse response, HttpServletRequest request) throws ParseException, SpotifyWebApiException, IOException {
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+        response.setHeader("Access-Control-Allow-Methods", "GET");
+        
+        SpotifyService spotifyService = new SpotifyService(accessToken, this.redirectUrl);
+        String userId = spotifyService.getCurrentUser().getId();
+        UserModel currentUser = this.userService.findUserById(userId);
+        return currentUser.getMaxScore();
+    }
+
+    @PostMapping("/score/save")
+    public Boolean saveRanking(@CookieValue("spotdle-access") String accessToken, HttpServletResponse response, HttpServletRequest request, @RequestBody Score score) throws ParseException, SpotifyWebApiException, IOException {
+        System.out.println(score);
+        
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+        
+        SpotifyService spotifyService = new SpotifyService(accessToken, this.redirectUrl);
+        String userId = spotifyService.getCurrentUser().getId();
+        UserModel currentUser = this.userService.findUserById(userId);
+        Integer oldScore = currentUser.getMaxScore();
+        if(score.getScore() > oldScore) {
+            currentUser.setMaxScore(score.getScore());
+            userService.saveUser(currentUser);
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 

@@ -24,4 +24,13 @@ public class UserService {
     public Boolean userExists(String id) {
         return userRepository.existsById(id);
     }
+
+    public UserModel[] getTopUsers(Integer Q) {
+        ArrayList<UserModel> users = (ArrayList<UserModel>) userRepository.findAll();
+        UserModel[] topUsers = new UserModel[Q];
+        for (int i = 0; i < Q; i++) {
+            topUsers[i] = users.get(i);
+        }
+        return topUsers;
+    }
 }
