@@ -11,6 +11,7 @@ public class UserModel {
 
     private String name;
     private String email;
+    private Integer maxScore;
 
     //Getters
     public String getId() {
@@ -25,6 +26,10 @@ public class UserModel {
         return email;
     }
 
+    public Integer getMaxScore() {
+        return maxScore;
+    }
+
     //Setters
     public void setId(String id) {
         this.id = id;
@@ -36,5 +41,9 @@ public class UserModel {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setMaxScore(Integer maxScore) {
+        this.maxScore = maxScore;
     }
 }
