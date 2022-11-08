@@ -54,7 +54,7 @@ public class RankingController {
     }
     
     @PostMapping("/save")
-    public void saveRanking(@CookieValue("spotdle-access") String accessToken, HttpServletResponse response, HttpServletRequest request, @RequestBody String score) throws ParseException, SpotifyWebApiException, IOException {
+    public void saveRanking(@CookieValue("spotdle-access") String accessToken, HttpServletResponse response, HttpServletRequest request, @RequestBody Score score) throws ParseException, SpotifyWebApiException, IOException {
         System.out.println(score);
         
         response.setHeader("Access-Control-Allow-Credentials", "true");
@@ -64,8 +64,8 @@ public class RankingController {
         String userId = spotifyService.getCurrentUser().getId();
         UserModel currentUser = this.userService.findUserById(userId);
         Integer oldScore = currentUser.getMaxScore();
-        if(Integer.parseInt(score) > oldScore) {
-            currentUser.setMaxScore(Integer.parseInt(score));
+        if(score.getScore() > oldScore) {
+            currentUser.setMaxScore(score.getScore());
             userService.saveUser(currentUser);
         }
         return;
