@@ -41,6 +41,10 @@ public class RankingController {
 
     @GetMapping()
     public Integer getMaxScore(@CookieValue("spotdle-access") String accessToken, HttpServletResponse response, HttpServletRequest request) throws ParseException, SpotifyWebApiException, IOException {
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+        response.setHeader("Access-Control-Allow-Methods", "GET");
+        
         SpotifyService spotifyService = new SpotifyService(accessToken, this.redirectUrl);
         String userId = spotifyService.getCurrentUser().getId();
         UserModel currentUser = this.userService.findUserById(userId);
@@ -49,6 +53,10 @@ public class RankingController {
     
     @PostMapping("/save")
     public void saveRanking(@CookieValue("spotdle-access") String accessToken, HttpServletResponse response, HttpServletRequest request, @RequestBody Integer score) throws ParseException, SpotifyWebApiException, IOException {
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+        response.setHeader("Access-Control-Allow-Methods", "POST");
+        
         SpotifyService spotifyService = new SpotifyService(accessToken, this.redirectUrl);
         String userId = spotifyService.getCurrentUser().getId();
         UserModel currentUser = this.userService.findUserById(userId);
