@@ -11,7 +11,9 @@ public class UserModel {
 
     private String name;
     private String email;
-    private Integer maxScore;
+    
+    @Column(nullable = false)
+    private Integer maxScore = 0;
 
     //Getters
     public String getId() {

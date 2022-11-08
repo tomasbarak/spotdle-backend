@@ -61,8 +61,13 @@ public class LoginController {
             final AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
             accessToken = authorizationCodeCredentials.getAccessToken();
             SpotifyService spotifyService = new SpotifyService(accessToken, this.redirectUrl);
-            UserModel user = spotifyService.getUser();
-            userService.saveUser(user);
+            String userId = spotifyService.getCurrentUser().getId();
+            
+            if(!userService.userExists(userId)) {
+                UserModel user = spotifyService.getUser();
+                userService.saveUser(user);
+            }
+
             Cookie spotdle_cookie = new Cookie("spotdle-access", accessToken);
 
 

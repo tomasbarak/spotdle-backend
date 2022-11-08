@@ -20,4 +20,8 @@ public class UserService {
     public UserModel saveUser(UserModel user){
         return userRepository.save(user);
     }
+
+    public Boolean userExists(String id) {
+        return userRepository.existsById(id);
+    }
 }
