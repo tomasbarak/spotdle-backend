@@ -36,10 +36,17 @@ public class RankingController {
     
     @Value("${url.auth.redirect}")
     private String redirectUrl;
+
+    @GetMapping()
+    public Integer getMaxScore(@CookieValue("spotdle-access") String accessToken, HttpServletResponse response, HttpServletRequest request) throws ParseException, SpotifyWebApiException, IOException {
+        SpotifyService spotifyService = new SpotifyService(accessToken, this.redirectUrl);
+        String userId = spotifyService.getCurrentUser().getId();
+        UserModel currentUser = this.userService.findUserById(userId);
+        return currentUser.getMaxScore();
+    }
     
     @GetMapping("/save")
-    public Enumeration<String> saveRanking(@CookieValue("spotdle-access") String accessToken, HttpServletResponse response, HttpServletRequest request) throws ParseException, SpotifyWebApiException, IOException {
-        return request.getParameterNames();
+    public void saveRanking(@CookieValue("spotdle-access") String accessToken, HttpServletResponse response, HttpServletRequest request) throws ParseException, SpotifyWebApiException, IOException {
     }
 }
 
