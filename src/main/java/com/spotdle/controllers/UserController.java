@@ -115,7 +115,7 @@ public class UserController {
         return currentUser.getMaxScore();
     }
 
-    @GetMapping("/score/save")
+    @PostMapping("/score/save")
     public Boolean saveRanking(@CookieValue("spotdle-access") String accessToken, HttpServletResponse response, HttpServletRequest request, @RequestBody Score score) throws ParseException, SpotifyWebApiException, IOException {
         System.out.println(score);
         
