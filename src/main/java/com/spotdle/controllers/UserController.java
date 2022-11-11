@@ -34,7 +34,7 @@ import se.michaelthelin.spotify.model_objects.specification.Paging;
 @ResponseBody
 @RestController
 @RequestMapping("/me/user")
-@CrossOrigin(maxAge = 3600, origins = { "http://localhost:3001", "https://spotdle.com" }, allowedHeaders = "*", allowCredentials = "true")
+@CrossOrigin(maxAge = 3600, origins = { "http://localhost:3001", "https://spotdle.ar" }, allowedHeaders = "*", allowCredentials = "true")
 public class UserController {
     @Autowired
     UserService userService;

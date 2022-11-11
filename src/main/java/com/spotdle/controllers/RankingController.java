@@ -34,7 +34,7 @@ import se.michaelthelin.spotify.model_objects.specification.Paging;
 
 @ResponseBody
 @RestController
-@CrossOrigin(maxAge = 3600, origins = { "http://localhost:3001", "https://spotdle.com" }, allowedHeaders = "*", allowCredentials = "true")
+@CrossOrigin(maxAge = 3600, origins = { "http://localhost:3001", "https://spotdle.ar" }, allowedHeaders = "*", allowCredentials = "true")
 @RequestMapping("/ranking")
 public class RankingController {
     @Autowired
