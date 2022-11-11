@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Id;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,6 +34,7 @@ import se.michaelthelin.spotify.model_objects.specification.Paging;
 
 @ResponseBody
 @RestController
+@CrossOrigin(maxAge = 3600, origins = { "http://localhost:3001", "https://spotdle.com" }, allowedHeaders = "*", allowCredentials = "true")
 @RequestMapping("/ranking")
 public class RankingController {
     @Autowired
@@ -42,13 +44,10 @@ public class RankingController {
     private String redirectUrl;
 
     @GetMapping("/top")
-    public UserModel[] getTopUsers(@CookieValue("spotdle-access") String accessToken, HttpServletResponse response, HttpServletRequest request, @RequestParam Integer Q) throws ParseException, SpotifyWebApiException, IOException {
+    public UserModel[] getTopUsers(@CookieValue("spotdle-access") String accessToken, HttpServletResponse response, HttpServletRequest request, @RequestParam Integer q) throws ParseException, SpotifyWebApiException, IOException {
         SpotifyService spotifyService = new SpotifyService(accessToken, this.redirectUrl);
         String id = spotifyService.getUser().getId();
-        response.setHeader("Access-Control-Allow-Credentials", "true");
-        response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
-        response.setHeader("Access-Control-Allow-Methods", "GET");
-        return userService.getTopUsers(Q);
+        return userService.getTopUsers(q);
     }
 }
 
